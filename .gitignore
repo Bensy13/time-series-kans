@@ -1,0 +1,44 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+*.pyo
+*.pkl
+*.joblib
+*.npy
+*.npz
+
+# Hidden system files
+.DS_Store
+Thumbs.db
+
+# Logs and outputs
+*.log
+*.out
+*.err
+
+# Model checkpoints, weights, training artifacts
+*.ckpt
+*.h5
+*.pt
+*.pth
+
+# Saved models or experiment outputs
+outputs/
+checkpoints/
+runs/
+lightning_logs/
+wandb/
+
+
+# Jupyter notebook outputs (optional if outputs are large/noisy)
+**/*.ipynb
+!notebooks/*.ipynb  # <- allows notebooks in notebooks/ but ignores others
+
+# Cache from notebooks
+*.ipynb_checkpoints
+
+# Pipenv / Poetry lock files (if you’re not using them)
+Pipfile.lock
+poetry.lock
