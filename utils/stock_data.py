@@ -55,7 +55,8 @@ def split_dataframe(df: pd.DataFrame, splits=(0.7, 0.1, 0.2)):
     val_end = train_end + int(n * splits[1])
     return df.iloc[:train_end], df.iloc[train_end:val_end], df.iloc[val_end:]
 
-def get_data_loaders(stock: StockIndex, window_size: int, batch_size: int, splits=(0.7, 0.1, 0.2), shuffle_train=True) -> Tuple[DataLoader, DataLoader, DataLoader, Dict[str, MinMaxScaler]]:
+def get_data_loaders(stock: StockIndex, window_size: int, batch_size: int, use_val_split=True, splits=(0.7, 0.1, 0.2), shuffle_train=True):
+
     df = pd.read_parquet(file_path)
 
     # Cast all Volume columns to float64 to prevent dtype incompatibility
@@ -93,10 +94,17 @@ def get_data_loaders(stock: StockIndex, window_size: int, batch_size: int, split
     test_ds  = TimeSeriesDataset(df_test, stock, window_size)
 
     train_dl = DataLoader(train_ds, batch_size=batch_size, shuffle=shuffle_train)
-    val_dl   = DataLoader(val_ds, batch_size=batch_size, shuffle=False)
     test_dl  = DataLoader(test_ds, batch_size=batch_size, shuffle=False)
-
-    return train_dl, val_dl, test_dl, scalers
+    
+    if use_val_split:
+        val_dl = DataLoader(val_ds, batch_size=batch_size, shuffle=False)
+        return train_dl, val_dl, test_dl, scalers
+    else:
+        # Merge train + val for final training
+        combined_df = pd.concat([df_train, df_val])
+        combined_ds = TimeSeriesDataset(combined_df, stock, window_size)
+        combined_dl = DataLoader(combined_ds, batch_size=batch_size, shuffle=shuffle_train)
+        return combined_dl, test_dl, scalers
 
 if __name__ == "__main__":
     stock = StockIndex.NVDA

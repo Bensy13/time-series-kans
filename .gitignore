@@ -32,10 +32,6 @@ lightning_logs/
 wandb/
 
 
-# Jupyter notebook outputs (optional if outputs are large/noisy)
-**/*.ipynb
-!notebooks/*.ipynb  # <- allows notebooks in notebooks/ but ignores others
-
 # Cache from notebooks
 *.ipynb_checkpoints
 
