@@ -1,0 +1,15 @@
+=== KO ===
+Trial #62
+Validation Loss: 0.000375
+hidden_dim: 112
+batch_size: 64
+num_layers: 1
+grid: 5
+k: 3
+lr: 0.0010177741207291712
+lambda_reg: 4.185092346381734e-05
+lamb_entropy: 1.5812984977636078
+lamb_l1: 1.535546579048181
+lamb_coef: 2.91941013100606e-05
+lamb_coefdiff: 0.0058096631325982254
+

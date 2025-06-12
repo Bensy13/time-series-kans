@@ -125,10 +125,116 @@ def get_data_loaders(stock: StockIndex, window_size: int, batch_size: int, use_v
 
         return combined_dl, test_dl, scalers
 
+class LogReturnDataset(Dataset):
+    def __init__(self, df, stock: StockIndex, window_size: int):
+        self.window_size = window_size
+        self.stock = stock.value
+        self.df = df.reset_index(drop=True)
+
+        self.data = self.df.drop(columns=["Close_raw"]).values
+        self.raw_close = self.df["Close_raw"].values
+        self.length = len(self.data) - window_size
+
+    def __len__(self):
+        return self.length
+
+    def __getitem__(self, idx):
+        x = self.data[idx : idx + self.window_size]
+        y = self.data[idx + self.window_size][STOCK_FEATURES.index("Close")]  # log return
+        prev_close = self.raw_close[idx + self.window_size - 1]  # P_{t-1}
+        return torch.tensor(x, dtype=torch.float32), torch.tensor(y, dtype=torch.float32), torch.tensor(prev_close, dtype=torch.float32)
+
+# class LogReturnDataset(Dataset):
+#     def __init__(self, df, stock: StockIndex, window_size: int, horizon: int = 1):
+#         self.window_size = window_size
+#         self.horizon = horizon
+#         self.stock = stock.value
+#         self.df = df.reset_index(drop=True)
+
+#         self.data = self.df.drop(columns=["Close_raw"]).values
+#         self.raw_close = self.df["Close_raw"].values
+#         self.length = len(self.data) - window_size - horizon + 1
+
+#     def __len__(self):
+#         return self.length
+
+#     def __getitem__(self, idx):
+#         x = self.data[idx : idx + self.window_size]
+#         y = self.data[idx + self.window_size : idx + self.window_size + self.horizon, STOCK_FEATURES.index("Close")]
+#         prev_close = self.raw_close[idx + self.window_size - 1]  # P_t
+
+#         return (
+#             torch.tensor(x, dtype=torch.float32),              # shape: [window_size, input_dim]
+#             torch.tensor(y, dtype=torch.float32),              # shape: [horizon]
+#             torch.tensor(prev_close, dtype=torch.float32),     # scalar
+#         )
+
+
+
+def get_log_return_loaders(stock: StockIndex, window_size: int, batch_size: int, splits=(0.8, 0.1, 0.1)):
+    df = pd.read_parquet(file_path)
+
+    # --- Clean and enrich ---
+    df.columns = ['_'.join(col) if isinstance(col, tuple) else col for col in df.columns]
+    df = df.ffill().dropna()
+    df['day_of_year'] = df.index.dayofyear
+    df['day_sin'] = np.sin(2 * np.pi * df['day_of_year'] / 365)
+    df['day_cos'] = np.cos(2 * np.pi * df['day_of_year'] / 365)
+
+    # --- Preserve raw Close for later reconstruction ---
+    df['Close_raw'] = df[f"{stock.value}_Close"]
+
+    # --- Compute log returns for stock features ---
+    log_df = pd.DataFrame(index=df.index)
+    for feat in STOCK_FEATURES:
+        col = f"{stock.value}_{feat}"
+        shifted = df[col].shift(1)
+        valid = (shifted > 0) & (df[col] > 0)
+        log_df[col] = np.log(df[col] / shifted).where(valid)
+
+    # --- Compute log returns for index features ---
+    for col in INDEX_FEATURES:
+        shifted = df[col].shift(1)
+        valid = (shifted > 0) & (df[col] > 0)
+        log_df[col] = np.log(df[col] / shifted).where(valid)
+
+    # --- Add day encodings + Close_raw target reference ---
+    log_df['day_sin'] = df['day_sin']
+    log_df['day_cos'] = df['day_cos']
+    log_df['Close_raw'] = df['Close_raw']
+
+    # --- Drop NaNs caused by shifting ---
+    log_df.dropna(inplace=True)
+
+    # --- Define column ordering for consistency ---
+    input_cols = [f"{stock.value}_{f}" for f in STOCK_FEATURES] + INDEX_FEATURES + ['day_sin', 'day_cos']
+    log_df = log_df[input_cols + ['Close_raw']]
+
+    # --- Rescale sin/cos to match Close return range ---
+    target_col = f"{stock.value}_Close"
+    rmin, rmax = log_df[target_col].min(), log_df[target_col].max()
+    for col in ['day_sin', 'day_cos']:
+        log_df[col] = (log_df[col]) * (rmax - rmin) + rmin
+
+    # --- Split ---
+    train_df, val_df, test_df = split_dataframe(log_df, splits)
+
+    # --- Create datasets and loaders ---
+    train_ds = LogReturnDataset(train_df, stock, window_size)
+    val_ds   = LogReturnDataset(val_df, stock, window_size)
+    test_ds  = LogReturnDataset(test_df, stock, window_size)
+
+    train_dl = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
+    val_dl   = DataLoader(val_ds, batch_size=batch_size, shuffle=False)
+    test_dl  = DataLoader(test_ds, batch_size=batch_size, shuffle=False)
+
+    return train_dl, val_dl, test_dl
+
+
 if __name__ == "__main__":
 
     stock = StockIndex.NVDA
-    train_dl, val_dl, test_dl, scalers = get_data_loaders(stock, window_size=10, batch_size=32)
+    train_dl, val_dl, test_dl, scalers = get_data_loaders(stock, window_size=7, batch_size=32)
     print(f"Train batches: {len(train_dl)}, Val: {len(val_dl)}, Test: {len(test_dl)}")
     xb, yb = next(iter(train_dl))
     # View first sample in the first batch
@@ -141,3 +247,29 @@ if __name__ == "__main__":
     print(sample_y)
 
     print("Sample batch shape:", xb.shape, yb.shape)
+
+    window_size = 10
+    batch_size = 32
+
+    train_dl, val_dl, test_dl = get_log_return_loaders(stock, window_size, batch_size)
+
+    print(f"Train batches: {len(train_dl)}, Val: {len(val_dl)}, Test: {len(test_dl)}")
+
+    xb, yb, p_tm1 = next(iter(test_dl))  # get first batch
+
+    # View first sample in batch
+    sample_x = xb[0]       # shape (window_size, num_features)
+    sample_y = yb[0].item()       # scalar log return target
+    sample_prev_price = p_tm1[0].item()  # scalar P_{t-1}
+
+    print("Sample X (10 timesteps × N features):")
+    print(sample_x)
+
+    print("\nCorresponding Y (target log return):")
+    print(sample_y)
+
+    print("\nPrevious Close price (P_t-1):")
+    print(sample_prev_price)
+
+    print("\nBatch shapes:")
+    print("X:", xb.shape, "| Y:", yb.shape, "| P_t-1:", p_tm1.shape)

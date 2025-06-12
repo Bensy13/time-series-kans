@@ -1,0 +1,15 @@
+=== NVDA ===
+Trial #42
+Validation Loss: 0.003345
+hidden_dim: 64
+batch_size: 48
+num_layers: 2
+grid: 13
+k: 2
+lr: 0.006606998028725651
+lambda_reg: 0.0008251731794814873
+lamb_entropy: 0.24267972801572674
+lamb_l1: 1.311260552687473
+lamb_coef: 2.9275528404866757e-05
+lamb_coefdiff: 1.6257343048503087e-05
+

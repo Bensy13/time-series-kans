@@ -1,0 +1,24 @@
+Stock: NVDA
+Val Loss: 0.000685
+hidden_dim: 192
+num_layers: 3
+dropout: 0.22832671613107025
+lr: 0.001025807645705379
+batch_size: 16
+
+Stock: AAPL
+Val Loss: 0.000168
+hidden_dim: 32
+num_layers: 2
+dropout: 0.1879585812618099
+lr: 0.00016388823896781193
+batch_size: 64
+
+Stock: KO
+Val Loss: 0.000070
+hidden_dim: 32
+num_layers: 1
+dropout: 0.15532586065977919
+lr: 0.0010746245334922824
+batch_size: 64
+

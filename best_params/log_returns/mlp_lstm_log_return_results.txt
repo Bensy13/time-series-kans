@@ -1,0 +1,40 @@
+
+===== NVDA (MLP→LSTM) =====
+batch_size: 16
+num_layers: 1
+layer_0_dim: 32
+mlp_dropout: 0.2897991884982838
+mlp_lr: 0.0009668228045708458
+lstm_hidden_dim: 352
+lstm_num_layers: 3
+lstm_dropout: 0.35533961672900083
+lstm_lr: 0.00011110887344303596
+Val Loss: 0.000684
+
+
+===== AAPL (MLP→LSTM) =====
+batch_size: 64
+num_layers: 1
+layer_0_dim: 64
+mlp_dropout: 0.49874603484197316
+mlp_lr: 0.0006285029108482047
+lstm_hidden_dim: 224
+lstm_num_layers: 3
+lstm_dropout: 0.4352854918415097
+lstm_lr: 0.0012493070903409715
+Val Loss: 0.000169
+
+
+===== KO (MLP→LSTM) =====
+batch_size: 64
+num_layers: 2
+layer_0_dim: 224
+layer_1_dim: 224
+mlp_dropout: 0.4541575041346178
+mlp_lr: 0.0009548721079891713
+lstm_hidden_dim: 32
+lstm_num_layers: 3
+lstm_dropout: 0.3159847161164443
+lstm_lr: 0.0034995329242571388
+Val Loss: 0.000070
+

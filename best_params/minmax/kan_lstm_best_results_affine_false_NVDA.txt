@@ -1,0 +1,14 @@
+Val Loss: 0.004144
+batch_size: 32
+kan_hidden_dim: 6
+encoded_dim: 8
+grid: 9
+k: 6
+kan_lr: 0.00012316992246152894
+lstm_hidden_dim: 32
+lstm_num_layers: 1
+lstm_dropout: 0.30509031870364545
+lstm_lr: 0.0003989560669109018
+lambda_reg: 0.0004458266419066633
+lamb_entropy: 0.717720236975619
+lamb_l1: 1.149059078087476

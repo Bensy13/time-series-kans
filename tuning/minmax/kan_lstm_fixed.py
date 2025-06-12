@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 import random
 import torch
@@ -149,33 +149,33 @@ def train_and_evaluate(trial, stock: StockIndex):
 
 def main():
     set_seed(SEED)
-    results_file = f"kan_fixed_lstm_best_results_affine_true.txt"
+    stock = StockIndex.KO
+    results_file = f"kan_fixed_lstm_best_results_affine_false_{stock.name}.txt"
 
     with open(results_file, "w") as f:
-        for stock in StockIndex:
-            print(f"Tuning for {stock.name}...")
-            f.write(f"\n===== {stock.name} =====\n")
+        print(f"Tuning for {stock.name}...")
+        f.write(f"\n===== {stock.name} =====\n")
 
-            def objective(trial):
-                try:
-                    return train_and_evaluate(trial, stock)
-                except Exception as e:
-                    print(f"Trial failed for {stock.name}: {e}")
-                    return float("inf")
+        def objective(trial):
+            try:
+                return train_and_evaluate(trial, stock)
+            except Exception as e:
+                print(f"Trial failed for {stock.name}: {e}")
+                return float("inf")
 
-            study = optuna.create_study(
-                direction="minimize",
-                sampler=optuna.samplers.TPESampler(seed=SEED)
-            )
-            study.optimize(objective, n_trials=150)
+        study = optuna.create_study(
+            direction="minimize",
+            sampler=optuna.samplers.TPESampler(seed=SEED)
+        )
+        study.optimize(objective, n_trials=150)
 
-            # Log best trial
-            print(f"Best trial for {stock.name}:")
-            print(f"Value: {study.best_value:.6f}")
-            print(f"Params: {study.best_trial.params}")
-            f.write(f"Val Loss: {study.best_value:.6f}\n")
-            for key, val in study.best_trial.params.items():
-                f.write(f"{key}: {val}\n")
+        # Log best trial
+        print(f"Best trial for {stock.name}:")
+        print(f"Value: {study.best_value:.6f}")
+        print(f"Params: {study.best_trial.params}")
+        f.write(f"Val Loss: {study.best_value:.6f}\n")
+        for key, val in study.best_trial.params.items():
+            f.write(f"{key}: {val}\n")
 if __name__ == "__main__":
     main()
 

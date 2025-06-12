@@ -1,0 +1,33 @@
+
+===== NVDA =====
+kan_hidden_dim: 7
+grid: 19
+k: 4
+kan_lr: 0.004182035354893474
+lambda_reg: 0.0005318964548329693
+lamb_entropy: 1.2079842821662439
+lamb_l1: 0.6404082359636214
+Val Loss: 0.000686
+
+
+===== AAPL =====
+kan_hidden_dim: 9
+grid: 19
+k: 2
+kan_lr: 0.00013234247653114565
+lambda_reg: 0.0007497451140268015
+lamb_entropy: 1.8713366269328693
+lamb_l1: 0.7842429649506079
+Val Loss: 0.000168
+
+
+===== KO =====
+kan_hidden_dim: 4
+grid: 21
+k: 6
+kan_lr: 0.001012790863154233
+lambda_reg: 0.00016123565135628472
+lamb_entropy: 0.7907978735226249
+lamb_l1: 0.5093093993828226
+Val Loss: 0.000070
+

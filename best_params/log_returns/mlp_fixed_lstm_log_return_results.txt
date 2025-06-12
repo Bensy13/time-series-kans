@@ -1,0 +1,27 @@
+
+===== NVDA (MLP encoder) =====
+num_layers: 1
+layer_0_dim: 48
+dropout: 0.40800555224625357
+mlp_lr: 0.001216259369610786
+Val Loss: 0.000686
+
+
+===== AAPL (MLP encoder) =====
+num_layers: 3
+layer_0_dim: 128
+layer_1_dim: 112
+layer_2_dim: 48
+dropout: 0.13906884560255356
+mlp_lr: 0.0023359635026261607
+Val Loss: 0.000168
+
+
+===== KO (MLP encoder) =====
+num_layers: 2
+layer_0_dim: 16
+layer_1_dim: 80
+dropout: 0.16820964947491662
+mlp_lr: 0.00013492834268013249
+Val Loss: 0.000070
+

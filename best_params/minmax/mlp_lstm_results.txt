@@ -1,0 +1,36 @@
+
+===== NVDA (MLP encoder) =====
+Val Loss: 0.003034
+batch_size: 64
+num_layers: 1
+layer_0_dim: 96
+mlp_dropout: 0.11101877285806869
+mlp_lr: 0.0001371417249659207
+lstm_hidden_dim: 448
+lstm_num_layers: 1
+lstm_dropout: 0.4239957160428596
+lstm_lr: 0.0001838881981064509
+
+===== AAPL (MLP encoder) =====
+Val Loss: 0.000572
+batch_size: 64
+num_layers: 1
+layer_0_dim: 224
+mlp_dropout: 0.4038629449927321
+mlp_lr: 0.00018567292554405796
+lstm_hidden_dim: 384
+lstm_num_layers: 1
+lstm_dropout: 0.4977111921526725
+lstm_lr: 0.00020753729233794063
+
+===== KO (MLP encoder) =====
+Val Loss: 0.000402
+batch_size: 16
+num_layers: 1
+layer_0_dim: 256
+mlp_dropout: 0.2966879994967002
+mlp_lr: 0.0010370417305110072
+lstm_hidden_dim: 448
+lstm_num_layers: 1
+lstm_dropout: 0.4763314866611378
+lstm_lr: 0.00048306012121073996

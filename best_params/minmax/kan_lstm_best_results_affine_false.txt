@@ -1,0 +1,42 @@
+Val Loss: 0.002309
+batch_size: 32
+kan_hidden_dim: 12
+encoded_dim: 32
+grid: 17
+k: 5
+kan_lr: 0.00011268963102032083
+lstm_hidden_dim: 192
+lstm_num_layers: 1
+lstm_dropout: 0.22463575856778772
+lstm_lr: 0.001516630588988748
+lambda_reg: 0.0004848050748393971
+lamb_entropy: 0.7823116839030262
+lamb_l1: 0.1906265883066321
+Val Loss: 0.000247
+batch_size: 16
+kan_hidden_dim: 7
+encoded_dim: 8
+grid: 7
+k: 4
+kan_lr: 0.009929099288524628
+lstm_hidden_dim: 192
+lstm_num_layers: 3
+lstm_dropout: 0.45041191993002205
+lstm_lr: 0.002433974830655499
+lambda_reg: 4.4023687865344134e-05
+lamb_entropy: 1.3642621491886504
+lamb_l1: 1.5776285378778048
+Val Loss: 0.000407
+batch_size: 32
+kan_hidden_dim: 9
+encoded_dim: 4
+grid: 11
+k: 5
+kan_lr: 0.0014451741202787993
+lstm_hidden_dim: 32
+lstm_num_layers: 2
+lstm_dropout: 0.4083190044155843
+lstm_lr: 0.008873063296775638
+lambda_reg: 2.3551891814555216e-05
+lamb_entropy: 1.4982307075468073
+lamb_l1: 0.30748485072225795

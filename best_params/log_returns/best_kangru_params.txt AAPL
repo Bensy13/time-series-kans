@@ -1,0 +1,15 @@
+=== AAPL ===
+Trial #7
+Validation Loss: 0.000324
+hidden_dim: 16
+batch_size: 32
+num_layers: 1
+grid: 16
+k: 4
+lr: 0.0009833181933644897
+lambda_reg: 1.4843697010415788e-05
+lamb_entropy: 0.6908664112597581
+lamb_l1: 0.7178483118508193
+lamb_coef: 0.0015446089075047066
+lamb_coefdiff: 0.0008178476574339542
+

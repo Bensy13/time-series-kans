@@ -1,0 +1,45 @@
+batch_size: 16
+kan_hidden_dim: 14
+encoded_dim: 8
+grid: 17
+k: 2
+kan_lr: 0.005759900735645647
+lstm_hidden_dim: 320
+lstm_num_layers: 3
+lstm_dropout: 0.16234554872884044
+lstm_lr: 0.00036018342135438024
+lambda_reg: 1.2856933495455565e-05
+lamb_entropy: 1.2690516036569361
+lamb_l1: 0.15874766626547243
+Val Loss: 0.000686
+
+batch_size: 64
+kan_hidden_dim: 4
+encoded_dim: 4
+grid: 9
+k: 2
+kan_lr: 0.00018069708122183257
+lstm_hidden_dim: 480
+lstm_num_layers: 2
+lstm_dropout: 0.3143251016235965
+lstm_lr: 0.0007665031715824152
+lambda_reg: 2.7947832487959755e-05
+lamb_entropy: 0.41244736213499783
+lamb_l1: 1.0178703233437327
+Val Loss: 0.000168
+
+batch_size: 64
+kan_hidden_dim: 7
+encoded_dim: 4
+grid: 11
+k: 3
+kan_lr: 0.0001272136728401398
+lstm_hidden_dim: 416
+lstm_num_layers: 2
+lstm_dropout: 0.430297708579934
+lstm_lr: 0.0023156709535714637
+lambda_reg: 0.00017602791396212401
+lamb_entropy: 1.067384480372168
+lamb_l1: 1.4591922326555635
+Val Loss: 0.000070
+

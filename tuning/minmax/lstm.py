@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 import torch
 import torch.nn as nn
@@ -25,7 +25,6 @@ def train_and_evaluate(trial, stock: StockIndex):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = LSTMRegressor(input_dim=input_dim, hidden_dim=hidden_dim, num_layers=num_layers, dropout=dropout).to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
-
     criterion = nn.MSELoss()
     early_stopper = EarlyStopping(patience=20, min_delta=1e-4)
 
@@ -45,7 +44,6 @@ def train_and_evaluate(trial, stock: StockIndex):
                 xb, yb = xb.to(device), yb.to(device)
                 val_loss += criterion(model(xb).squeeze(), yb).item()
         val_loss /= len(val_dl)
-
         early_stopper(val_loss)
         if early_stopper.early_stop:
             print(f"Stopped at epoch: {epoch}")
