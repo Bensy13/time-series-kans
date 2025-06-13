@@ -42,8 +42,7 @@ def train_and_evaluate(trial: Trial):
     train_dl, val_dl, _, train_ds, val_ds, _ = get_loaders(
         window_size=window_size,
         horizon=horizon,
-        batch_size=batch_size,
-        standardize=True
+        batch_size=batch_size
     )
 
     input_dim = next(iter(train_dl))[0].shape[-1]
@@ -71,8 +70,8 @@ def train_and_evaluate(trial: Trial):
         lamb_entropy=lamb_entropy,
         lamb_coef=lamb_coef,
         lamb_coefdiff=lamb_coefdiff,
-        patience=6,
-        min_delta=1e-5,
+        patience=5,
+        min_delta=1e-6,
         log=10,
         warmup_steps=3
     )
@@ -98,7 +97,7 @@ def train_and_evaluate(trial: Trial):
 
     avg_val_loss = total_loss / total_samples
     std_penalty = (preds.std() - targets.std()) ** 2
-    full_loss = avg_val_loss + 0.1 * std_penalty.item()
+    full_loss = avg_val_loss + 1.0 * std_penalty.item()
 
     return full_loss
 

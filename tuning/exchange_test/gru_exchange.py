@@ -44,8 +44,7 @@ def train_and_evaluate(trial: Trial):
     train_dl, val_dl, _, train_ds, val_ds, _ = get_loaders(
         window_size=window_size,
         horizon=horizon,
-        batch_size=batch_size,
-        standardize=True
+        batch_size=batch_size
     )
 
     input_dim = next(iter(train_dl))[0].shape[-1]
@@ -57,8 +56,8 @@ def train_and_evaluate(trial: Trial):
     loss_fn = nn.MSELoss()
 
     # Early stopping setup
-    patience = 10
-    min_delta = 1e-5
+    patience = 5
+    min_delta = 1e-6
     best_val_loss = float("inf")
     bad_epochs = 0
 
@@ -90,7 +89,7 @@ def train_and_evaluate(trial: Trial):
         preds = torch.cat(preds, dim=0)
         targets = torch.cat(targets, dim=0)
         std_penalty = (preds.std() - targets.std()) ** 2
-        full_loss = val_loss + 0.1 * std_penalty.item()
+        full_loss = val_loss + 1.0 * std_penalty.item()
 
         if full_loss + min_delta < best_val_loss:
             best_val_loss = full_loss

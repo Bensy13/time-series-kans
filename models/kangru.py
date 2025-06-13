@@ -1,3 +1,8 @@
+# Portions of this code, including line search and cubic interpolation,
+# are adapted from the official pykan repository:
+# https://github.com/KindXiaoming/pykan
+# Licensed under the MIT License.
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
